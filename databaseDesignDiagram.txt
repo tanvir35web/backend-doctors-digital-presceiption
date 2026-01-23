@@ -1,0 +1,56 @@
+// Doctor Prescription Digitization System (Scalable Design)
+// DBML for dbdiagram.io
+
+Table doctors {
+  id integer [primary key]
+  name varchar
+  email varchar [unique]
+  password_hash varchar
+  specialization varchar
+  created_at timestamp
+}
+
+Table patients {
+  id integer [primary key]
+  name varchar
+  age integer
+  gender varchar
+  phone varchar [unique]
+  email varchar
+  created_at timestamp
+}
+
+Table prescriptions {
+  id integer [primary key]
+  doctor_id integer [not null]
+  patient_id integer [not null]
+  chief_complaints text
+  diagnosis text
+  investigation text
+  advice text
+  pdf_url varchar
+  created_at timestamp
+}
+
+Table medicines {
+  id integer [primary key]
+  prescription_id integer [not null]
+  medicine_name varchar
+  dosage varchar
+  timing varchar
+  duration varchar
+}
+
+Table prescription_emails {
+  id integer [primary key]
+  prescription_id integer [not null]
+  recipient_email varchar
+  sent_at timestamp
+  status varchar
+}
+
+// Relationships
+Ref doctor_prescriptions: prescriptions.doctor_id > doctors.id
+Ref patient_prescriptions: prescriptions.patient_id > patients.id
+Ref prescription_medicines: medicines.prescription_id > prescriptions.id
+Ref prescription_email_log: prescription_emails.prescription_id > prescriptions.id
