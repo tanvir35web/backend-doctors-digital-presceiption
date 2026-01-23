@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Doctor, DoctorListResponse } from './doctor.interface';
 

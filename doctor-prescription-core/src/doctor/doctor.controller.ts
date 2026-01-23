@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Controller, Get } from '@nestjs/common';
 import { DoctorService } from './doctor.service';
 import type { DoctorListResponse } from 'src/doctor/doctor.interface';
