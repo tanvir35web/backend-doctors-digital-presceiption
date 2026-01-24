@@ -5,6 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DoctorModule } from './doctor/doctor.module';
+import { PatientModule } from './patient/patient.module';
+import { PrescriptionModule } from './prescription/prescription.module';
+import { MedicineModule } from './medicine/medicine.module';
+import { PrescriptionEmailModule } from './prescription-email/prescription-email.module';
 
 @Module({
   imports: [
@@ -24,6 +28,10 @@ import { DoctorModule } from './doctor/doctor.module';
     }),
 
     DoctorModule,
+    PatientModule,
+    PrescriptionModule,
+    MedicineModule,
+    PrescriptionEmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

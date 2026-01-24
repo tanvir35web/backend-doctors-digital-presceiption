@@ -7,6 +7,12 @@ import {
 } from 'typeorm';
 import { Prescription } from '../prescription/prescription.entity';
 
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other',
+}
+
 @Entity('patients')
 export class Patient {
   @PrimaryGeneratedColumn()
@@ -18,8 +24,8 @@ export class Patient {
   @Column()
   age: number;
 
-  @Column()
-  gender: string;
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
 
   @Column({ unique: true })
   phone: string;

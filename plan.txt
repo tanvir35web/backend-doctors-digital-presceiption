@@ -1,0 +1,11 @@
+POST   /auth/login
+POST   /auth/register
+
+POST   /patients
+GET    /patients?phone=017...
+
+POST   /prescriptions
+GET    /prescriptions/:id
+GET    /prescriptions/search?phone=017...
+
+POST   /prescriptions/:id/email
