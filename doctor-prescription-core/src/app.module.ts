@@ -9,6 +9,7 @@ import { PatientModule } from './patient/patient.module';
 import { PrescriptionModule } from './prescription/prescription.module';
 import { MedicineModule } from './medicine/medicine.module';
 import { PrescriptionEmailModule } from './prescription-email/prescription-email.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PrescriptionEmailModule } from './prescription-email/prescription-email
       synchronize: false,
     }),
 
+    AuthModule,
     DoctorModule,
     PatientModule,
     PrescriptionModule,

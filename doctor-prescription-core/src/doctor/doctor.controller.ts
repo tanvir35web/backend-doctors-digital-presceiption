@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
 import { DoctorService } from './doctor.service';
-import type { DoctorListResponse } from 'src/doctor/doctor.interface';
+import { Doctor } from './doctor.entity';
 
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
   @Get()
-  getDoctorsList(): DoctorListResponse {
+  async getDoctorsList(): Promise<Doctor[]> {
     return this.doctorService.getDoctorsList();
   }
 }

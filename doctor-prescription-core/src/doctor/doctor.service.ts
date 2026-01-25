@@ -1,50 +1,32 @@
-import { Injectable } from '@nestjs/common';
-import { Doctor, DoctorListResponse } from './doctor.interface';
+import { Injectable, ConflictException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Doctor } from './doctor.entity';
 
 @Injectable()
 export class DoctorService {
-  private doctors: Array<Doctor> = [
-    {
-      id: 1,
-      name: 'Dr. John Doe',
-      speciality: 'Cardiology',
-      experience: '10 years',
-      image: 'https://via.placeholder.com/150',
-    },
-    {
-      id: 2,
-      name: 'Dr. Jane Smith',
-      speciality: 'Dermatology',
-      experience: '5 years',
-      image: 'https://via.placeholder.com/150',
-    },
-    {
-      id: 3,
-      name: 'Dr. Michael Johnson',
-      speciality: 'Orthopedics',
-      experience: '15 years',
-      image: 'https://via.placeholder.com/150',
-    },
-    {
-      id: 4,
-      name: 'Dr. Sarah Williams',
-      speciality: 'Neurology',
-      experience: '8 years',
-      image: 'https://via.placeholder.com/150',
-    },
-    {
-      id: 5,
-      name: 'Dr. David Brown',
-      speciality: 'Pediatrics',
-      experience: '12 years',
-      image: 'https://via.placeholder.com/150',
-    },
-  ];
+  constructor(
+    @InjectRepository(Doctor)
+    private readonly doctorRepository: Repository<Doctor>,
+  ) {}
 
-  getDoctorsList(): DoctorListResponse {
-    return {
-      message: 'Doctors List fetched successfully',
-      data: this.doctors,
-    };
+  async findByEmail(email: string): Promise<Doctor | null> {
+    return this.doctorRepository.findOne({ where: { email } });
+  }
+
+  async create(doctorData: Partial<Doctor>): Promise<Doctor> {
+    if (!doctorData.email) {
+      throw new ConflictException('Email is required');
+    }
+    const existingDoctor = await this.findByEmail(doctorData.email);
+    if (existingDoctor) {
+      throw new ConflictException('Doctor with this email already exists');
+    }
+    const doctor = this.doctorRepository.create(doctorData);
+    return this.doctorRepository.save(doctor);
+  }
+
+  async getDoctorsList(): Promise<Doctor[]> {
+    return this.doctorRepository.find();
   }
 }
