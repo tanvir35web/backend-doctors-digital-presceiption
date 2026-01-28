@@ -24,6 +24,18 @@ export class Doctor {
   @Column()
   specialization: string;
 
+  @Column()
+  bmdc_reg_no: string;
+
+  @Column()
+  education: string;
+
+  @Column()
+  doctor_chamber: string;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  visit_fee: number;
+
   @CreateDateColumn()
   created_at: Date;
 

@@ -31,5 +31,20 @@ services:
       - mysql_data:/var/lib/mysql
     restart: unless-stopped
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_dev
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
 volumes:
   mysql_data:

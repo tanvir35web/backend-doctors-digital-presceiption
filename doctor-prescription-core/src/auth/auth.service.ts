@@ -28,6 +28,10 @@ export class AuthService {
         name: doctor.name,
         email: doctor.email,
         specialization: doctor.specialization,
+        bmdc_reg_no: doctor.bmdc_reg_no,
+        education: doctor.education,
+        doctor_chamber: doctor.doctor_chamber,
+        visit_fee: doctor.visit_fee,
       },
       access_token: token,
     };

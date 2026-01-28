@@ -27,6 +27,10 @@ export class DoctorService {
   }
 
   async getDoctorsList(): Promise<Doctor[]> {
-    return this.doctorRepository.find();
+    return this.doctorRepository.find({
+      order: {
+        created_at: 'DESC',
+      },
+    });
   }
 }
