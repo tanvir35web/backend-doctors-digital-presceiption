@@ -10,4 +10,5 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:dev"]
+# Use webpack with polling for file watching in Docker
+CMD ["npx", "nest", "start", "--watch", "--preserveWatchOutput"]
