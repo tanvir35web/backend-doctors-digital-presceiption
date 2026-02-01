@@ -33,6 +33,9 @@ export class Patient {
   @Column({ nullable: true })
   email: string;
 
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
+  weight: number;
+
   @CreateDateColumn()
   created_at: Date;
 

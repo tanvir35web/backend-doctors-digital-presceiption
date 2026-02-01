@@ -24,4 +24,8 @@ export class CreatePatientDto {
   @IsEmail()
   @IsOptional()
   email?: string;
+
+  @IsNumber()
+  @IsOptional()
+  weight?: number;
 }

@@ -27,6 +27,9 @@ export class Medicine {
   @Column()
   duration: string;
 
+  @Column({ type: 'text', nullable: true })
+  notes: string;
+
   @ManyToOne(() => Prescription, (prescription) => prescription.medicines)
   @JoinColumn({ name: 'prescription_id' })
   prescription: Prescription;

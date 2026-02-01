@@ -27,7 +27,7 @@ export class DoctorService {
   }
 
   async getDoctorsList(): Promise<Doctor[]> {
-    // Fetch all doctors from database
+    // Fetch all doctors from database 
     return this.doctorRepository.find({
       order: {
         created_at: 'desc',
