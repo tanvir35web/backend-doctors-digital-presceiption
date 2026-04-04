@@ -2,51 +2,57 @@
 // DBML for dbdiagram.io
 
 Table doctors {
-  id integer [primary key]
-  name varchar
-  email varchar [unique]
-  password_hash varchar
-  specialization varchar
-  created_at timestamp
+  id integer [primary key, increment]
+  name varchar [not null]
+  email varchar [unique, not null]
+  password_hash varchar [not null]
+  specialization varchar [not null]
+  bmdc_reg_no varchar [not null]
+  education varchar [not null]
+  doctor_chamber varchar [not null]
+  visit_fee decimal(10,2) [not null]
+  created_at timestamp [default: `now()`]
 }
 
 Table patients {
-  id integer [primary key]
-  name varchar
-  age integer
-  gender varchar
-  phone varchar [unique]
-  email varchar
-  created_at timestamp
+  id integer [primary key, increment]
+  name varchar [not null]
+  age integer [not null]
+  gender enum('male','female','other') [not null]
+  phone varchar [unique, not null]
+  email varchar [null]
+  weight decimal(5,2) [null]
+  created_at timestamp [default: `now()`]
 }
 
 Table prescriptions {
-  id integer [primary key]
+  id integer [primary key, increment]
   doctor_id integer [not null]
   patient_id integer [not null]
-  chief_complaints text
-  diagnosis text
-  investigation text
-  advice text
-  pdf_url varchar
-  created_at timestamp
+  chief_complaints text [null]
+  diagnosis text [null]
+  investigation text [null]
+  advice text [null]
+  pdf_url varchar [null]
+  created_at timestamp [default: `now()`]
 }
 
 Table medicines {
-  id integer [primary key]
+  id integer [primary key, increment]
   prescription_id integer [not null]
-  medicine_name varchar
-  dosage varchar
-  timing varchar
-  duration varchar
+  medicine_name varchar [not null]
+  dosage varchar [not null]
+  timing varchar [not null]
+  duration varchar [not null]
+  notes text [null]
 }
 
 Table prescription_emails {
-  id integer [primary key]
+  id integer [primary key, increment]
   prescription_id integer [not null]
-  recipient_email varchar
-  sent_at timestamp
-  status varchar
+  recipient_email varchar [not null]
+  sent_at timestamp [default: `now()`]
+  status varchar [not null]
 }
 
 // Relationships
