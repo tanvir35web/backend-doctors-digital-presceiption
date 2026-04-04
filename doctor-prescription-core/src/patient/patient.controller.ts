@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { PatientService } from './patient.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { ApiResponse } from '../types/api-response.type';
@@ -25,6 +33,28 @@ export class PatientController {
     return {
       message: 'Patients fetched successfully',
       data: patients,
+    };
+  }
+
+  @Get('search')
+  async findByPhone(
+    @Query('phone') phone: string,
+  ): Promise<ApiResponse<Patient>> {
+    const patient = await this.patientService.findByPhone(phone);
+    return {
+      message: 'Patient fetched successfully',
+      data: patient,
+    };
+  }
+
+  @Get(':id')
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<Patient>> {
+    const patient = await this.patientService.findById(id);
+    return {
+      message: 'Patient fetched successfully',
+      data: patient,
     };
   }
 }
