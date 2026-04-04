@@ -10,6 +10,7 @@ import { PrescriptionModule } from './prescription/prescription.module';
 import { MedicineModule } from './medicine/medicine.module';
 import { PrescriptionEmailModule } from './prescription-email/prescription-email.module';
 import { AuthModule } from './auth/auth.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AuthModule } from './auth/auth.module';
     PrescriptionModule,
     MedicineModule,
     PrescriptionEmailModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
