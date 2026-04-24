@@ -1,14 +1,15 @@
-import { Controller, Get, Request } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('dashboard')
+@UseGuards(JwtAuthGuard)
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
   @Get('stats')
-  async getStats(@Request() req: { user?: { id: number } }) {
-    const doctorId = req.user?.id || 1; // Temporary fallback until auth guards are wired
-    const data = await this.dashboardService.getStats(doctorId);
+  async getStats(@Request() req) {
+    const data = await this.dashboardService.getStats(req.user.id);
     return {
       message: 'Dashboard statistics fetched successfully',
       data,

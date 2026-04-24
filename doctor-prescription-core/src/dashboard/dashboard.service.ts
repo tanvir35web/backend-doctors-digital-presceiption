@@ -26,17 +26,25 @@ export class DashboardService {
       todayIncomeResult,
       totalEarningResult,
     ] = await Promise.all([
-      // Today's new patients
-      this.patientRepository
-        .createQueryBuilder('patient')
-        .where('patient.created_at >= :start AND patient.created_at <= :end', {
-          start: todayStart,
-          end: todayEnd,
-        })
-        .getCount(),
+      // Today's unique patients for this doctor (via prescriptions)
+      this.prescriptionRepository
+        .createQueryBuilder('prescription')
+        .select('COUNT(DISTINCT prescription.patient_id)', 'count')
+        .where('prescription.doctor_id = :doctorId', { doctorId })
+        .andWhere(
+          'prescription.created_at >= :start AND prescription.created_at <= :end',
+          { start: todayStart, end: todayEnd },
+        )
+        .getRawOne()
+        .then((result) => Number(result?.count ?? 0)),
 
-      // Total patients
-      this.patientRepository.count(),
+      // Total unique patients for this doctor (via prescriptions)
+      this.prescriptionRepository
+        .createQueryBuilder('prescription')
+        .select('COUNT(DISTINCT prescription.patient_id)', 'count')
+        .where('prescription.doctor_id = :doctorId', { doctorId })
+        .getRawOne()
+        .then((result) => Number(result?.count ?? 0)),
 
       // Today's income: count of today's prescriptions × doctor's visit_fee
       this.prescriptionRepository
