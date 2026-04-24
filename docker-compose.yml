@@ -11,6 +11,9 @@ services:
       - /app/node_modules
     env_file:
       - ./doctor-prescription-core/.env
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
     depends_on:
       mysql:
         condition: service_healthy

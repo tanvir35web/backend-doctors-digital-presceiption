@@ -23,6 +23,8 @@
   - [Get Single Prescription](#get-prescriptionsid)
   - [Update Prescription](#patch-prescriptionsid)
   - [Delete Prescription](#delete-prescriptionsid)
+  - [Download Prescription PDF](#get-prescriptionsidpdf)
+  - [Email Prescription to Patient](#post-prescriptionsidsend-email)
 - [Dashboard](#dashboard)
   - [Get Stats](#get-apidashboardstats)
 - [Error Responses](#error-responses)
@@ -463,6 +465,75 @@ Deletes a prescription by ID.
 | Status | Description                           |
 |--------|---------------------------------------|
 | `404`  | Prescription not found or unauthorized |
+
+---
+
+### `GET /prescriptions/:id/pdf`
+
+Downloads the prescription as a PDF file. The response is a binary PDF — not JSON.
+
+**Path Parameters**
+
+| Parameter | Type     | Description          |
+|-----------|----------|----------------------|
+| `id`      | `number` | Prescription ID      |
+
+**Response `200 OK`**
+
+Binary PDF file with headers:
+```
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="prescription-{id}.pdf"
+```
+
+**Error Responses**
+
+| Status | Description              |
+|--------|--------------------------|
+| `404`  | Prescription not found   |
+
+---
+
+### `POST /prescriptions/:id/send-email`
+
+Sends the prescription PDF as an email attachment to the patient. Uses the patient's email by default, or a custom email if provided.
+
+**Path Parameters**
+
+| Parameter | Type     | Description          |
+|-----------|----------|----------------------|
+| `id`      | `number` | Prescription ID      |
+
+**Request Body** (optional)
+
+| Field   | Type     | Required | Description                                    |
+|---------|----------|----------|------------------------------------------------|
+| `email` | `string` | No       | Override recipient email (uses patient email if omitted) |
+
+**Example Request**
+
+```json
+{
+  "email": "custom@example.com"
+}
+```
+
+**Response `200 OK`**
+
+```json
+{
+  "message": "Prescription sent successfully",
+  "recipient": "patient@example.com",
+  "sent_at": "2026-04-24T10:30:00.000Z"
+}
+```
+
+**Error Responses**
+
+| Status | Description                                          |
+|--------|------------------------------------------------------|
+| `404`  | Prescription not found or unauthorized               |
+| `404`  | No email found (patient has no email, none provided) |
 
 ---
 

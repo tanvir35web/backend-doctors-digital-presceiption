@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -27,6 +28,25 @@ import { DashboardModule } from './dashboard/dashboard.module';
       database: process.env.DB_NAME as string,
       autoLoadEntities: true,
       synchronize: false,
+    }),
+
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        transport: {
+          host: config.get('SMTP_HOST'),
+          port: Number(config.get('SMTP_PORT')),
+          secure: false,
+          auth: {
+            user: config.get('SMTP_USER'),
+            pass: config.get('SMTP_PASS'),
+          },
+        },
+        defaults: {
+          from: config.get('SMTP_FROM'),
+        },
+      }),
     }),
 
     AuthModule,
