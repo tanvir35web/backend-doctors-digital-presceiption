@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   OneToMany,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { Prescription } from '../prescription/prescription.entity';
 
 @Entity('doctors')
@@ -18,6 +19,7 @@ export class Doctor {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column()
   password_hash: string;
 
