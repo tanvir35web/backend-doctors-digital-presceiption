@@ -28,6 +28,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
       database: process.env.DB_NAME as string,
       autoLoadEntities: true,
       synchronize: false,
+      ssl:
+        process.env.DB_SSL === 'true'
+          ? { rejectUnauthorized: false }
+          : undefined,
     }),
 
     MailerModule.forRootAsync({
