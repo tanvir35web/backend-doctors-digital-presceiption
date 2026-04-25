@@ -10,6 +10,7 @@
 |--------|----------|-------------|
 | POST | `/prescriptions` | Create a new prescription |
 | GET | `/prescriptions` | Get all prescriptions for the doctor |
+| GET | `/prescriptions/recent` | Get the last 10 prescriptions for the doctor |
 | GET | `/prescriptions?patientId={id}` | Get all prescriptions for a patient |
 | GET | `/prescriptions/:id` | Get a single prescription |
 | PATCH | `/prescriptions/:id` | Update a prescription |
@@ -131,6 +132,43 @@ Get all prescriptions belonging to the currently authenticated doctor (sorted by
   }
 ]
 ```
+
+---
+
+## GET `/prescriptions/recent`
+
+Get the last 10 prescriptions for the currently authenticated doctor (sorted by newest first). Designed for dashboard/recent prescriptions widgets.
+
+### Example
+
+```
+GET /api/v1/prescriptions/recent
+```
+
+### Response `200 OK`
+
+Returns an array of up to 10 prescription objects (same shape as `GET /prescriptions`).
+
+```json
+[
+  {
+    "id": 12,
+    "doctor_id": 1,
+    "patient_id": 3,
+    "chief_complaints": "Cough and cold",
+    "investigation": "Chest X-ray",
+    "diagnosis": "Bronchitis",
+    "advice": "Avoid cold drinks",
+    "pdf_url": null,
+    "created_at": "2026-04-25T09:00:00.000Z",
+    "doctor": { ... },
+    "patient": { ... },
+    "medicines": [ ... ]
+  }
+]
+```
+
+> **Note:** This endpoint always returns a maximum of 10 items. For the full list, use `GET /prescriptions`.
 
 ---
 

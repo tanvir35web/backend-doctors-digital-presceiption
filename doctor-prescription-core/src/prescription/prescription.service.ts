@@ -77,6 +77,15 @@ export class PrescriptionService {
     });
   }
 
+  async findRecent(doctorId: number, limit = 10): Promise<Prescription[]> {
+    return this.prescriptionRepository.find({
+      where: { doctor_id: doctorId },
+      relations: ['patient', 'doctor', 'medicines'],
+      order: { created_at: 'DESC' },
+      take: limit,
+    });
+  }
+
   async findOne(id: number): Promise<Prescription> {
     const prescription = await this.prescriptionRepository.findOne({
       where: { id },

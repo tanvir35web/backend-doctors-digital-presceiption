@@ -42,6 +42,11 @@ export class PrescriptionController {
     return this.prescriptionService.findAll(req.user.id);
   }
 
+  @Get('recent')
+  findRecent(@Request() req) {
+    return this.prescriptionService.findRecent(req.user.id);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.prescriptionService.findOne(id);
