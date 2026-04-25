@@ -32,6 +32,7 @@ A digital prescription management system for doctors. Built with NestJS, TypeORM
 ├── docs/                           # API documentation for frontend team
 │   ├── api-patients.md
 │   ├── api-prescriptions.md
+│   ├── api-recent-prescriptions.md
 │   └── api-prescription-pdf-email.md
 ├── API_DOCS.md                     # Full API reference
 └── databaseDesignDiagram.txt       # DBML schema for dbdiagram.io
@@ -105,6 +106,12 @@ All endpoints are prefixed with `/api/v1`. Protected routes require:
 Authorization: Bearer <access_token>
 ```
 
+### Health (public)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Server status, uptime & timestamp |
+
 ### Auth
 
 | Method | Endpoint | Description |
@@ -127,6 +134,7 @@ Authorization: Bearer <access_token>
 |--------|----------|-------------|
 | POST | `/prescriptions` | Create prescription with medicines |
 | GET | `/prescriptions` | List doctor's prescriptions |
+| GET | `/prescriptions/recent` | Last 10 prescriptions |
 | GET | `/prescriptions?patientId=N` | List by patient |
 | GET | `/prescriptions/:id` | Get single prescription |
 | PATCH | `/prescriptions/:id` | Update prescription |
