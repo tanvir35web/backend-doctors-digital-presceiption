@@ -25,7 +25,8 @@ export class MedicalReportService {
     file: Express.Multer.File,
     dto: UploadReportDto,
   ): Promise<MedicalReport> {
-    const fileType = file.mimetype === 'application/pdf' ? FileType.PDF : FileType.IMAGE;
+    const fileType =
+      file.mimetype === 'application/pdf' ? FileType.PDF : FileType.IMAGE;
 
     const report = this.reportRepository.create({
       lab_id: labId,

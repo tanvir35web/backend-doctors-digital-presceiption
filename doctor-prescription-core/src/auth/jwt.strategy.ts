@@ -33,6 +33,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!doctor) {
       throw new UnauthorizedException('Doctor not found');
     }
-    return { id: doctor.id, email: doctor.email, name: doctor.name, role: 'doctor' };
+    return {
+      id: doctor.id,
+      email: doctor.email,
+      name: doctor.name,
+      role: 'doctor',
+    };
   }
 }

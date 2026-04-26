@@ -79,10 +79,7 @@ export class ReportDownloadController {
   constructor(private readonly reportService: MedicalReportService) {}
 
   @Get(':id/download')
-  async download(
-    @Param('id', ParseIntPipe) id: number,
-    @Res() res: Response,
-  ) {
+  async download(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const report = await this.reportService.findOne(id);
     const filePath = path.join(process.cwd(), report.file_url);
 
