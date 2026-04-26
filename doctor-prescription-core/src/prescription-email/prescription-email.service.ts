@@ -44,8 +44,8 @@ export class PrescriptionEmailService {
     // Send email
     await this.mailerService.sendMail({
       to: email,
-      subject: `Prescription from Dr. ${prescription.doctor.name}`,
-      text: `Dear ${prescription.patient.name},\n\nPlease find your prescription attached.\n\nRegards,\nDr. ${prescription.doctor.name}\n${prescription.doctor.specialization}`,
+      subject: `Prescription from  ${prescription.doctor.name}`,
+      text: `Dear ${prescription.patient.name},\n\nPlease find your prescription attached.\n\nRegards,\n ${prescription.doctor.name}\n${prescription.doctor.specialization}`,
       attachments: [
         {
           filename: `prescription-${prescriptionId}.pdf`,
