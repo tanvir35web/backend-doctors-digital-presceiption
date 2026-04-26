@@ -81,6 +81,13 @@ export class ReportDownloadController {
   @Get(':id/download')
   async download(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const report = await this.reportService.findOne(id);
+
+    // Cloudinary hosted images — redirect to the URL
+    if (report.file_url.startsWith('http')) {
+      return res.redirect(report.file_url);
+    }
+
+    // Local files (PDFs)
     const filePath = path.join(process.cwd(), report.file_url);
 
     if (!fs.existsSync(filePath)) {
