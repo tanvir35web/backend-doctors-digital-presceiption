@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MedicalReport } from './medical-report.entity';
 import { MedicalReportService } from './medical-report.service';
+import { CloudinaryService } from './cloudinary.service';
 import {
   MedicalReportController,
   ReportDownloadController,
@@ -16,7 +17,7 @@ import { PatientModule } from '../patient/patient.module';
     ReportDownloadController,
     LabPatientController,
   ],
-  providers: [MedicalReportService],
-  exports: [MedicalReportService, TypeOrmModule],
+  providers: [MedicalReportService, CloudinaryService],
+  exports: [MedicalReportService, CloudinaryService, TypeOrmModule],
 })
 export class MedicalReportModule {}
