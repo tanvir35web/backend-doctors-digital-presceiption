@@ -27,6 +27,20 @@
   - [Email Prescription to Patient](#post-prescriptionsidsend-email)
 - [Dashboard](#dashboard)
   - [Get Stats](#get-apidashboardstats)
+- [Lab Authentication](#lab-authentication)
+  - [Register Lab](#post-labauthregister)
+  - [Login Lab](#post-labauthlogin)
+- [Lab — Patient Search](#lab--patient-search)
+  - [Search by Phone](#get-labpatientssearchphone)
+  - [Get by ID](#get-labpatientsid)
+- [Lab — Medical Reports](#lab--medical-reports)
+  - [Upload Report](#post-labreportsupload)
+  - [List Lab Reports](#get-labreports)
+  - [Get Single Report](#get-labreportsid)
+  - [Delete Report](#delete-labreportsid)
+- [Doctor — Patient Reports](#doctor--patient-reports)
+  - [Get Patient Reports](#get-patientsidreports)
+  - [Download Report File](#get-reportsiddownload)
 - [Error Responses](#error-responses)
 
 ---
@@ -563,6 +577,280 @@ Returns key statistics for the logged-in doctor's dashboard.
 | `today_income`   | `number` | Sum of visit fees from prescriptions issued today         |
 | `total_patients` | `number` | Total number of patients in the system                    |
 | `total_earning`  | `number` | Sum of visit fees across all prescriptions by this doctor |
+
+---
+
+## Lab Authentication
+
+### `POST /lab/auth/register`
+
+Registers a new lab and returns a JWT access token with `role: "lab"`.
+
+**Request Body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | `string` | Yes | Lab name |
+| `email` | `string` | Yes | Unique email address |
+| `password` | `string` | Yes | Minimum 6 characters |
+| `phone` | `string` | Yes | Contact phone number |
+| `address` | `string` | Yes | Lab location/address |
+| `license_no` | `string` | Yes | Lab license/registration number |
+
+**Example Request**
+
+```json
+{
+  "name": "Popular Diagnostics",
+  "email": "info@populardiag.com",
+  "password": "securepassword",
+  "phone": "+8801711000001",
+  "address": "123 Lab Road, Dhaka",
+  "license_no": "LAB-2026-001"
+}
+```
+
+**Response `201 Created`**
+
+```json
+{
+  "message": "Registration successful",
+  "lab": {
+    "id": 1,
+    "name": "Popular Diagnostics",
+    "email": "info@populardiag.com",
+    "phone": "+8801711000001",
+    "address": "123 Lab Road, Dhaka",
+    "license_no": "LAB-2026-001"
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Error Responses**
+
+| Status | Description |
+|--------|-------------|
+| `400` | Validation failed |
+| `409` | Lab with this email already exists |
+
+---
+
+### `POST /lab/auth/login`
+
+Authenticates a lab and returns a JWT access token.
+
+**Request Body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `email` | `string` | Yes | Registered email |
+| `password` | `string` | Yes | Account password |
+
+**Response `200 OK`**
+
+```json
+{
+  "message": "Login successful",
+  "lab": {
+    "id": 1,
+    "name": "Popular Diagnostics",
+    "email": "info@populardiag.com",
+    "phone": "+8801711000001",
+    "address": "123 Lab Road, Dhaka",
+    "license_no": "LAB-2026-001"
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Error Responses**
+
+| Status | Description |
+|--------|-------------|
+| `400` | Validation failed |
+| `401` | Invalid credentials |
+
+---
+
+## Lab — Patient Search
+
+> Requires lab JWT token: `Authorization: Bearer <lab_access_token>`
+
+### `GET /lab/patients/search?phone=...`
+
+Search for a patient by phone number.
+
+**Query Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `phone` | `string` | Yes | Patient phone number |
+
+**Response `200 OK`**
+
+```json
+{
+  "message": "Patient fetched successfully",
+  "data": {
+    "id": 1,
+    "name": "Rahim Uddin",
+    "age": 45,
+    "gender": "male",
+    "phone": "+8801711000000",
+    "email": "rahim@example.com",
+    "weight": "72.50",
+    "created_at": "2026-04-04T10:00:00.000Z"
+  }
+}
+```
+
+---
+
+### `GET /lab/patients/:id`
+
+Get a patient by ID.
+
+**Response `200 OK`** — Same structure as search above.
+
+---
+
+## Lab — Medical Reports
+
+> Requires lab JWT token: `Authorization: Bearer <lab_access_token>`
+
+### `POST /lab/reports/upload`
+
+Upload a medical report for a patient. Uses `multipart/form-data`.
+
+**Request (multipart/form-data)**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `file` | `file` | Yes | JPEG, PNG, WebP, or PDF. Max 10MB |
+| `patient_id` | `number` | Yes | Patient ID |
+| `report_type` | `string` | Yes | `xray`, `mri`, `ct_scan`, `blood_test`, `ultrasound`, or `other` |
+| `title` | `string` | Yes | Report title (e.g. "Chest X-Ray") |
+| `description` | `string` | No | Optional notes |
+| `report_date` | `string` | Yes | ISO date (e.g. `2026-04-25`) |
+
+**Response `201 Created`**
+
+```json
+{
+  "message": "Report uploaded successfully",
+  "data": {
+    "id": 1,
+    "lab_id": 1,
+    "patient_id": 1,
+    "report_type": "xray",
+    "title": "Chest X-Ray",
+    "description": "Normal findings",
+    "file_url": "/uploads/reports/a1b2c3d4-e5f6.jpg",
+    "file_type": "image",
+    "original_filename": "chest-xray.jpg",
+    "report_date": "2026-04-25",
+    "created_at": "2026-04-25T10:00:00.000Z"
+  }
+}
+```
+
+---
+
+### `GET /lab/reports`
+
+List all reports uploaded by this lab, sorted by newest first. Includes patient info.
+
+**Response `200 OK`**
+
+```json
+{
+  "message": "Reports fetched successfully",
+  "data": [
+    {
+      "id": 1,
+      "report_type": "xray",
+      "title": "Chest X-Ray",
+      "file_type": "image",
+      "report_date": "2026-04-25",
+      "created_at": "2026-04-25T10:00:00.000Z",
+      "patient": { "id": 1, "name": "Rahim Uddin", "phone": "+8801711000000" }
+    }
+  ]
+}
+```
+
+---
+
+### `GET /lab/reports/:id`
+
+Get a single report with lab and patient details.
+
+**Response `200 OK`** — Full report object with `lab` and `patient` relations.
+
+---
+
+### `DELETE /lab/reports/:id`
+
+Delete a report. Only the lab that uploaded it can delete it. Also removes the file from disk.
+
+**Response `200 OK`**
+
+```json
+{ "message": "Report deleted successfully" }
+```
+
+**Error Responses**
+
+| Status | Description |
+|--------|-------------|
+| `404` | Report not found or unauthorized |
+
+---
+
+## Doctor — Patient Reports
+
+> Requires doctor JWT token: `Authorization: Bearer <doctor_access_token>`
+
+### `GET /patients/:id/reports`
+
+Get all medical reports for a specific patient. Returns reports from all labs, sorted by newest first.
+
+**Path Parameters**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | Patient ID |
+
+**Response `200 OK`**
+
+```json
+{
+  "message": "Patient reports fetched successfully",
+  "data": [
+    {
+      "id": 1,
+      "report_type": "xray",
+      "title": "Chest X-Ray",
+      "description": "Normal findings",
+      "file_url": "/uploads/reports/a1b2c3d4-e5f6.jpg",
+      "file_type": "image",
+      "original_filename": "chest-xray.jpg",
+      "report_date": "2026-04-25",
+      "created_at": "2026-04-25T10:00:00.000Z",
+      "lab": { "id": 1, "name": "Popular Diagnostics" }
+    }
+  ]
+}
+```
+
+---
+
+### `GET /reports/:id/download`
+
+Download a report file. Accessible by any authenticated user (doctor or lab).
+
+**Response `200 OK`** — Binary file download with original filename.
 
 ---
 

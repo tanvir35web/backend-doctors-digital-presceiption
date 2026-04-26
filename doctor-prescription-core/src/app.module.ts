@@ -12,6 +12,9 @@ import { MedicineModule } from './medicine/medicine.module';
 import { PrescriptionEmailModule } from './prescription-email/prescription-email.module';
 import { AuthModule } from './auth/auth.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { LabModule } from './lab/lab.module';
+import { LabAuthModule } from './lab-auth/lab-auth.module';
+import { MedicalReportModule } from './medical-report/medical-report.module';
 
 @Module({
   imports: [
@@ -60,6 +63,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
     MedicineModule,
     PrescriptionEmailModule,
     DashboardModule,
+    LabModule,
+    LabAuthModule,
+    MedicalReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

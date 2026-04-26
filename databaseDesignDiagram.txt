@@ -55,8 +55,35 @@ Table prescription_emails {
   status varchar [not null]
 }
 
+Table labs {
+  id integer [primary key, increment]
+  name varchar [not null]
+  email varchar [unique, not null]
+  password_hash varchar [not null]
+  phone varchar [not null]
+  address varchar [not null]
+  license_no varchar [not null]
+  created_at timestamp [default: `now()`]
+}
+
+Table medical_reports {
+  id integer [primary key, increment]
+  lab_id integer [not null]
+  patient_id integer [not null]
+  report_type enum('xray','mri','ct_scan','blood_test','ultrasound','other') [not null]
+  title varchar [not null]
+  description text [null]
+  file_url varchar [not null]
+  file_type enum('image','pdf') [not null]
+  original_filename varchar [not null]
+  report_date date [not null]
+  created_at timestamp [default: `now()`]
+}
+
 // Relationships
 Ref doctor_prescriptions: prescriptions.doctor_id > doctors.id
 Ref patient_prescriptions: prescriptions.patient_id > patients.id
 Ref prescription_medicines: medicines.prescription_id > prescriptions.id
 Ref prescription_email_log: prescription_emails.prescription_id > prescriptions.id
+Ref lab_reports: medical_reports.lab_id > labs.id
+Ref patient_reports: medical_reports.patient_id > patients.id

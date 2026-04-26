@@ -42,8 +42,8 @@ A digital prescription management system for doctors. Built with NestJS, TypeORM
 
 ```
 doctors ──< prescriptions >── patients
-                 │
-                 ├──< medicines
+                 │                │
+                 ├──< medicines   └──< medical_reports >── labs
                  └──< prescription_emails
 ```
 
@@ -52,6 +52,8 @@ doctors ──< prescriptions >── patients
 - **prescriptions** — doctor_id, patient_id, chief_complaints, diagnosis, investigation, advice, pdf_url
 - **medicines** — prescription_id, medicine_name, dosage, timing, duration, notes
 - **prescription_emails** — prescription_id, recipient_email, status, sent_at
+- **labs** — name, email, password, phone, address, license_no
+- **medical_reports** — lab_id, patient_id, report_type, title, description, file_url, file_type, original_filename, report_date
 
 ## Getting Started
 
@@ -147,6 +149,31 @@ Authorization: Bearer <access_token>
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/dashboard/stats` | Today's & total patients, income |
+
+### Lab Auth
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/lab/auth/register` | Register a new lab |
+| POST | `/lab/auth/login` | Lab login, returns JWT |
+
+### Lab — Reports (protected, lab role)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/lab/patients/search?phone=...` | Search patient by phone |
+| GET | `/lab/patients/:id` | Get patient by ID |
+| POST | `/lab/reports/upload` | Upload medical report (multipart) |
+| GET | `/lab/reports` | List lab's reports |
+| GET | `/lab/reports/:id` | Get single report |
+| DELETE | `/lab/reports/:id` | Delete report |
+
+### Medical Reports (protected)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/patients/:id/reports` | View patient's lab reports (doctor) |
+| GET | `/reports/:id/download` | Download report file (any auth) |
 
 ## PDF Prescription
 
