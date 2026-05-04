@@ -70,7 +70,7 @@ export class AuthService {
   }
 
   private generateToken(doctor: Doctor) {
-    const payload = { sub: doctor.id, email: doctor.email };
+    const payload = { sub: doctor.id, email: doctor.email, role: 'doctor' };
     return this.jwtService.sign(payload);
   }
 }

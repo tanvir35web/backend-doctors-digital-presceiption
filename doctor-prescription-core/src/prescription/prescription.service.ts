@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Prescription } from './prescription.entity';
@@ -21,7 +25,10 @@ export class PrescriptionService {
     private doctorRepository: Repository<Doctor>,
   ) {}
 
-  async create(doctorId: number, createPrescriptionDto: CreatePrescriptionDto): Promise<Prescription> {
+  async create(
+    doctorId: number,
+    createPrescriptionDto: CreatePrescriptionDto,
+  ): Promise<Prescription> {
     // Verify patient exists
     const patient = await this.patientRepository.findOne({
       where: { id: createPrescriptionDto.patient_id },
@@ -48,10 +55,14 @@ export class PrescriptionService {
       advice: createPrescriptionDto.advice,
     });
 
-    const savedPrescription = await this.prescriptionRepository.save(prescription);
+    const savedPrescription =
+      await this.prescriptionRepository.save(prescription);
 
     // Create medicines if provided
-    if (createPrescriptionDto.medicines && createPrescriptionDto.medicines.length > 0) {
+    if (
+      createPrescriptionDto.medicines &&
+      createPrescriptionDto.medicines.length > 0
+    ) {
       const medicines = createPrescriptionDto.medicines.map((med) =>
         this.medicineRepository.create({
           prescription_id: savedPrescription.id,
@@ -107,7 +118,11 @@ export class PrescriptionService {
     });
   }
 
-  async update(id: number, doctorId: number, updatePrescriptionDto: UpdatePrescriptionDto): Promise<Prescription> {
+  async update(
+    id: number,
+    doctorId: number,
+    updatePrescriptionDto: UpdatePrescriptionDto,
+  ): Promise<Prescription> {
     const prescription = await this.prescriptionRepository.findOne({
       where: { id, doctor_id: doctorId },
     });

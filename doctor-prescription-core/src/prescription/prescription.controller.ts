@@ -92,7 +92,11 @@ export class PrescriptionController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePrescriptionDto: UpdatePrescriptionDto,
   ) {
-    return this.prescriptionService.update(id, req.user.id, updatePrescriptionDto);
+    return this.prescriptionService.update(
+      id,
+      req.user.id,
+      updatePrescriptionDto,
+    );
   }
 
   @Delete(':id')
