@@ -42,6 +42,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
           host: config.get('SMTP_HOST'),
           port: Number(config.get('SMTP_PORT')),
           secure: false,
+          family: 4,
           auth: {
             user: config.get('SMTP_USER'),
             pass: config.get('SMTP_PASS'),
